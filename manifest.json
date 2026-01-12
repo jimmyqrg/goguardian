@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "GoGuardian",
+  "version": "1.0",
+  "description": "Site access control indicator",
+  "icons": {
+    "16": "icons/favicon-light.png",
+    "32": "icons/favicon-light.png",
+    "48": "icons/favicon-light.png",
+    "128": "icons/favicon-light.png"
+  },
+  "action": {
+    "default_title": "GoGuardian\nUnable to access this site"
+  },
+  "permissions": ["activeTab"]
+}
