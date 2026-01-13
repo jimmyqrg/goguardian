@@ -1,33 +1,31 @@
-// Detect system dark/light mode and update icon
+// Update extension icon based on Chrome theme
 function updateIcon() {
-  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    // Dark mode
+  chrome.theme.getCurrent((theme) => {
+    // If toolbar color exists, Chrome is likely in dark mode
+    const isDark = !!theme.colors?.toolbar;
+
     chrome.action.setIcon({
       path: {
-        "16": "icons/favicon-dark.png",
-        "32": "icons/favicon-dark.png", 
-        "48": "icons/favicon-dark.png",
-        "128": "icons/favicon-dark.png"
+        "16": isDark ? "icons/favicon-dark.png" : "icons/favicon-light.png",
+        "32": isDark ? "icons/favicon-dark.png" : "icons/favicon-light.png",
+        "48": isDark ? "icons/favicon-dark.png" : "icons/favicon-light.png",
+        "128": isDark ? "icons/favicon-dark.png" : "icons/favicon-light.png"
       }
     });
-  } else {
-    // Light mode
-    chrome.action.setIcon({
-      path: {
-        "16": "icons/favicon-light.png",
-        "32": "icons/favicon-light.png",
-        "48": "icons/favicon-light.png",
-        "128": "icons/favicon-light.png"
-      }
-    });
-  }
+  });
 }
 
-// Listen for system theme changes
-if (window.matchMedia) {
-  window.matchMedia('(prefers-color-scheme: dark)').addListener(updateIcon);
-}
+// Run when extension is installed
+chrome.runtime.onInstalled.addListener(() => {
+  updateIcon();
+});
 
-// Initialize icon on startup
-chrome.runtime.onStartup.addListener(updateIcon);
-chrome.runtime.onInstalled.addListener(updateIcon);
+// Run when Chrome starts
+chrome.runtime.onStartup.addListener(() => {
+  updateIcon();
+});
+
+// Run when the browser theme changes
+chrome.theme.onUpdated.addListener(() => {
+  updateIcon();
+});
