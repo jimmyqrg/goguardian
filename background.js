@@ -1,31 +1,30 @@
-// Update extension icon based on Chrome theme
-function updateIcon() {
-  chrome.theme.getCurrent((theme) => {
-    // If toolbar color exists, Chrome is likely in dark mode
-    const isDark = !!theme.colors?.toolbar;
+async function ensureOffscreen() {
+  const exists = await chrome.offscreen.hasDocument();
+  if (exists) return;
 
-    chrome.action.setIcon({
-      path: {
-        "16": isDark ? "icons/favicon-dark.png" : "icons/favicon-light.png",
-        "32": isDark ? "icons/favicon-dark.png" : "icons/favicon-light.png",
-        "48": isDark ? "icons/favicon-dark.png" : "icons/favicon-light.png",
-        "128": isDark ? "icons/favicon-dark.png" : "icons/favicon-light.png"
-      }
-    });
+  await chrome.offscreen.createDocument({
+    url: "offscreen.html",
+    reasons: ["MATCH_MEDIA"],
+    justification: "Detect system light/dark mode"
   });
 }
 
-// Run when extension is installed
-chrome.runtime.onInstalled.addListener(() => {
-  updateIcon();
-});
+function setIcon(isDark) {
+  chrome.action.setIcon({
+    path: {
+      "16": isDark ? "icons/favicon-dark.png" : "icons/favicon-light.png",
+      "32": isDark ? "icons/favicon-dark.png" : "icons/favicon-light.png",
+      "48": isDark ? "icons/favicon-dark.png" : "icons/favicon-light.png",
+      "128": isDark ? "icons/favicon-dark.png" : "icons/favicon-light.png"
+    }
+  });
+}
 
-// Run when Chrome starts
-chrome.runtime.onStartup.addListener(() => {
-  updateIcon();
-});
+chrome.runtime.onInstalled.addListener(ensureOffscreen);
+chrome.runtime.onStartup.addListener(ensureOffscreen);
 
-// Run when the browser theme changes
-chrome.theme.onUpdated.addListener(() => {
-  updateIcon();
+chrome.runtime.onMessage.addListener((msg) => {
+  if (msg.type === "theme") {
+    setIcon(msg.dark);
+  }
 });

@@ -2,13 +2,16 @@
   "manifest_version": 3,
   "name": "GoGuardian",
   "version": "1.0",
-  "description": "Site access control indicator",
+  "description": "The most powerful classroom management tool for schools.",
 
   "background": {
     "service_worker": "background.js"
   },
 
-  "permissions": ["activeTab", "theme"],
+  "permissions": [
+    "activeTab",
+    "offscreen"
+  ],
 
   "icons": {
     "16": "icons/favicon-light.png",
