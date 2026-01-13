@@ -5,22 +5,20 @@
   "description": "The most powerful classroom management tool for schools.",
 
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "sw.js"
   },
 
-  "permissions": [
-    "activeTab",
-    "offscreen"
-  ],
+  "permissions": ["activeTab", "scripting"],
 
   "icons": {
-    "16": "icons/favicon-light.png",
-    "32": "icons/favicon-light.png",
-    "48": "icons/favicon-light.png",
-    "128": "icons/favicon-light.png"
+    "16": "favicon.png",
+    "32": "favicon.png",
+    "48": "favicon.png",
+    "128": "favicon.png"
   },
 
   "action": {
+    "default_icon": "favicon.png",
     "default_title": "GoGuardian"
   }
 }
